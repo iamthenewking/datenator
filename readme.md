@@ -11,7 +11,7 @@ The **Datenator** plugin allows you to dynamically bulk update the published dat
 
 ## Installation
 
-1.  **Download the Plugin**
+1.  **Download the Plugin:** [Download](https://github.com/iamthenewking/datenator/releases/tag/datenator)
 2.  **Upload the Plugin**: Upload the file to the `wp-content/plugins/datenator` directory on your WordPress site.
 3.  **Activate the Plugin**:
     -   Go to the WordPress admin panel.
