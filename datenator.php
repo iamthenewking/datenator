@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function upd_add_admin_menu() {
     add_options_page(
         'Datenator Settings',
-        'Update Published Date',
+        'Datenator',
         'manage_options',
         'upd-settings',
         'upd_settings_page'
