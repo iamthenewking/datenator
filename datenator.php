@@ -2,7 +2,7 @@
 /*
 Plugin Name: Datenator
 Description: A plugin to dynamically update the published date for all existing posts.
-Version: 1.0
+Version: 1.1
 Author: Driving Theory Test
 Author URI: https://drivingtheorytest.info/
 */
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Add admin menu
 function upd_add_admin_menu() {
     add_options_page(
-        'Update Published Date Settings',
+        'Datenator Settings',
         'Update Published Date',
         'manage_options',
         'upd-settings',
@@ -28,7 +28,13 @@ add_action( 'admin_menu', 'upd_add_admin_menu' );
 function upd_settings_page() {
     ?>
     <div class="wrap">
-        <h1>Update Published Date Settings</h1>
+        <h1>Datenator Settings</h1>
+    <?php
+    if ( isset( $_GET['updated_posts'] ) ) {
+        $updated_posts = intval( $_GET['updated_posts'] );
+        echo '<div class="updated"><p>Successfully updated ' . $updated_posts . ' posts.</p></div>';
+    }
+    ?>
         <form method="post" action="options.php">
             <?php
             settings_fields( 'upd_settings_group' );
@@ -38,7 +44,7 @@ function upd_settings_page() {
         </form>
         <form method="post" action="">
             <input type="hidden" name="upd_update_posts" value="1" />
-            <?php submit_button('Start Updating Post Dates'); ?>
+            <?php submit_button('Start Bulk Post Dates'); ?>
         </form>
     </div>
     <?php
@@ -88,6 +94,7 @@ function upd_update_post_dates() {
         );
 
         $query = new WP_Query( $args );
+        $updated_posts = 0;
 
         if ( $query->have_posts() ) {
             while ( $query->have_posts() ) {
@@ -98,9 +105,14 @@ function upd_update_post_dates() {
                     'post_date' => $new_date,
                     'post_date_gmt' => get_gmt_from_date( $new_date ),
                 ) );
+                $updated_posts++;
             }
             wp_reset_postdata();
         }
+
+        // Redirect to settings page with updated posts count
+        wp_redirect( add_query_arg( 'updated_posts', $updated_posts, admin_url( 'options-general.php?page=upd-settings' ) ) );
+        exit;
     }
 }
 add_action( 'admin_init', 'upd_update_post_dates' );
